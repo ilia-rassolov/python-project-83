@@ -16,5 +16,3 @@ build:
 
 render-start:
 	gunicorn -w 5 -b 0.0.0.0:$(PORT) page_analyzer.app:app
-
-
