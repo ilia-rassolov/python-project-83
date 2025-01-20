@@ -1,6 +1,5 @@
 .venv
 hello.py
-.github
 .__pycache__/
 __pycache__/
 .env
