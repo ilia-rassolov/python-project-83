@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 import os
 from dotenv import load_dotenv
 
@@ -6,11 +6,12 @@ from dotenv import load_dotenv
 load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+app.config['DEBUG'] = True
 
 
 @app.route('/')
 def index():
-    return '<a href="/">Page analyzer</a>'
+    return render_template('index.html')
 
 
 if __name__ == '__main__':

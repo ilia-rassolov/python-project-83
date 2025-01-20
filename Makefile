@@ -11,9 +11,6 @@ dev:
 lint:
 	uv run flake8 page_analyzer
 
-test:
-	uv run pytest
-
 build:
 	./build.sh
 
