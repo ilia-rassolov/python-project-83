@@ -10,7 +10,7 @@ import os
 from dotenv import load_dotenv
 import psycopg2
 from db import get_db, UrlRepository
-from validator_db import validate
+from validator import validate
 
 
 app = Flask(__name__)
@@ -35,8 +35,9 @@ def add_url():
     if errors:
         return render_template('index.html', errors=errors, url=url_data), 422
     repo.save(url_data)
+
     render_template('show.html', url=url_data, errors=errors), 422
-    return redirect(url_for('/urls/<id>'))
+    return redirect(url_for('/urls/<id>'), code=302)
 
 @app.route('/urls/<id>')
 def find_url(id):

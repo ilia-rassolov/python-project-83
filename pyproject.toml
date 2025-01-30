@@ -11,4 +11,5 @@ dependencies = [
     "psycopg2>=2.9.10",
     "pytest-cov>=6.0.0",
     "python-dotenv>=1.0.1",
+    "validators>=0.34.0",
 ]

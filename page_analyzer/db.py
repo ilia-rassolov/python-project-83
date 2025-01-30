@@ -21,20 +21,19 @@ class UrlRepository:
             return dict(row) if row else None
 
     def get_entities(self):
-        with self.conn.cursor(row_factory=dict_row) as cur:
-        # with self.conn.cursor() as cur:
-            cur.execute("SELECT * FROM products")
+        with self.conn.cursor(row_factory=DictCursor) as cur:
+            cur.execute("SELECT * FROM urls")
             return [dict(row) for row in cur]
 
-    def save(self, product):
-        if 'id' not in product or not product['id']:
+    def save(self, url):
+        if 'id' not in url or not url['id']:
             with self.conn.cursor() as cur:
                 cur.execute(
-                    """INSERT INTO products (title, price) VALUES
-                    (%s, %s) RETURNING id""",
-                    (product['title'], product['price'])
+                    """INSERT INTO url (name) VALUES
+                    (%s) RETURNING id""",
+                    (url['name'])
                 )
                 id = cur.fetchone()[0]
-                product['id'] = id
+                url['id'] = id
             self.conn.commit()
 

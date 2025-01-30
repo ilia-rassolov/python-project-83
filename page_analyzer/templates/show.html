@@ -8,21 +8,32 @@
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-        <a class="navbar-brand" href="#">Анализатор страниц</a>
-        <a class="navbar-nav me-auto  mb-lg-0  nav-link" href="#">Сайты</a>
-      </div>
+    <nav class="navbar navbar-dark bg-dark">
+      <a class="navbar-brand ms-3" href="#">Анализатор страниц</a>
+      <a class="navbar-nav me-auto nav-link ms-2" href="#">Сайты</a>
     </nav>
-    <div class="container my-5">
-      <h1>Анализатор страниц</h1>
-      <div class="col-lg-8 px-0">
-        <p class="fs-5">Бесплатно проверяйте сайты на SEO-пригодность</p>
-        <form class="d-flex" role="search">
-          <input class="form-control me-2" type="search" placeholder="https//:www.example.com" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Проверить</button>
-        </form>
+    <div>
+      {% if errors %}
+      <div class="alert alert-info" role="alert">
+        Страница уже существует
       </div>
+      {% endif %}
     </div>
+
+    <div class="container">
+  <div class="row">
+    <div class="col">
+      <h1>Страница сайта</h1>
+
+      <!-- Здесь текст -->
+
+      <h3>Преимущества работы с нами</h3>
+      <h2>Быстрая доставка</h2>
+      <!-- Текст -->
+      <h2>Низкие цены</h2>
+      <!-- Текст -->
+    </div>
+  </div>
+</div>
   </body>
 </html>
