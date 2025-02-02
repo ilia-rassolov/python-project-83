@@ -1,39 +1,33 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <link rel="stylesheet" href="styles.css">
-  </head>
-  <body>
-    <nav class="navbar navbar-dark bg-dark">
-      <a class="navbar-brand ms-3" href="#">Анализатор страниц</a>
-      <a class="navbar-nav me-auto nav-link ms-2" href="#">Сайты</a>
-    </nav>
-    <div>
-      {% if errors %}
-      <div class="alert alert-info" role="alert">
+{% extends 'layout.html' %}
+
+{% block content %}
+{% if repeat %}
+<div class="alert alert-info" role="alert">
         Страница уже существует
-      </div>
-      {% endif %}
-    </div>
-
-    <div class="container">
-  <div class="row">
-    <div class="col">
-      <h1>Страница сайта</h1>
-
-      <!-- Здесь текст -->
-
-      <h3>Преимущества работы с нами</h3>
-      <h2>Быстрая доставка</h2>
-      <!-- Текст -->
-      <h2>Низкие цены</h2>
-      <!-- Текст -->
-    </div>
-  </div>
 </div>
-  </body>
-</html>
+{% endif %}
+{% if add_new %}
+<div class="alert alert-success" role="alert">
+        Страница успешно добавлена
+</div>
+{% endif %}
+<div class="container col-9 mt-3">
+    <h1 class="display">Сайт: {{ url['name'] }}</h1>
+    <table class="table table-hover table-bordered">
+        <tr>
+            <th class="col-3 fw-medium">ID</th>
+            <th class="col-6  fw-medium">{{ url['id'] }}</th>
+        </tr>
+        <tr>
+            <th class="fw-medium">Имя</th>
+            <th class="fw-medium">{{ url['name'] }}</th>
+        </tr>
+        <tr>
+            <th class="fw-medium">Дата создания</th>
+            <th class="fw-medium">{{ url['created_at'] }}</th>
+        </tr>
+    </table>
+    <h2 class="display mt-5">Проверки</h2>
+    <button class="btn btn-primary btn-sm fs-6 mt-2" type="submit">Запустить проверку</button>
+</div>
+{% endblock %}
