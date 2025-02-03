@@ -1,19 +1,23 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-{% if repeat %}
-<div class="alert alert-info" role="alert">
-        Страница уже существует
-</div>
-{% endif %}
-{% if add_new %}
-<div class="alert alert-success" role="alert">
-        Страница успешно добавлена
-</div>
+{% if messages %}
+  {% for category, message in messages %}
+    {% if category == 'warning' %}
+      <div class="alert alert-info  flashes" role="alert">
+        {{ message }}
+      </div>
+    {% endif %}
+    {% if category == 'success' %}
+      <div class="alert alert-success flashes" role="alert">
+        {{ message }}
+      </div>
+    {% endif %}
+  {% endfor %}
 {% endif %}
 <div class="container col-9 mt-3">
     <h1 class="display">Сайт: {{ url['name'] }}</h1>
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover table-bordered" data-test="url">
         <tr>
             <th class="col-3 fw-medium">ID</th>
             <th class="col-6  fw-medium">{{ url['id'] }}</th>

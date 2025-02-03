@@ -3,7 +3,7 @@
 {% block content %}
 <div class="container col-9 mt-3">
     <h1 class="display">Сайты</h1>
-    <table class="table table-hover table-bordered">
+    <table class="table table-hover table-bordered" data-test="urls">
         <thead>
         <tr>
             <th class="col-1">ID</th>
@@ -13,14 +13,14 @@
         </tr>
         </thead>
         <tbody>
+        {% for url in urls %}
         <tr class="">
-            {% for url in urls %}
             <td class="">{{ url['id'] }}</td>
             <td class=""><a class="" href="/urls/{{ url['id'] }}">{{ url['name'] }}</a></td>
             <td class="">{{ url['created_at'] }}</td>
             <td class="">пока так</td>
-            {% endfor %}
         </tr>
+        {% endfor %}
         </tbody>
     </table>
 </div>

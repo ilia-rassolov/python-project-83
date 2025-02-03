@@ -1,9 +1,11 @@
 {% extends 'layout.html' %}
 
 {% block content %}
-{% if errors %}
-<div class="alert alert-danger" role="alert">
-    {{ errors }}
+{% if messages %}
+<div class="alert alert-danger flashes" role="alert">
+    {% for category, message in messages %}
+    {{ message }}
+    {% endfor %}
 </div>
 {% endif %}
 <div class="container border col-6 mt-3 pt-5 ps-5 pb-5 rounded alt='10' bg-light">

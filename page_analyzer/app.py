@@ -1,4 +1,5 @@
-from flask import Flask, redirect, render_template, request, url_for
+from flask import (Flask, redirect, render_template, request,
+                   url_for, flash, get_flashed_messages)
 import os
 from dotenv import load_dotenv
 import psycopg2
@@ -20,7 +21,21 @@ repo = UrlRepository(conn)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    messages = get_flashed_messages(with_categories=True)
+    return render_template('index.html', messages=messages,)
+
+
+@app.route('/urls')
+def urls():
+    urls = repo.get_content()
+    return render_template('urls.html', urls=urls,)
+
+
+@app.route('/urls/<id>')
+def url_show(id):
+    url = repo.find_url(id)
+    messages = get_flashed_messages(with_categories=True)
+    return render_template('show.html', url=url, messages=messages,)
 
 
 @app.post('/')
@@ -28,27 +43,18 @@ def add_url():
     url_data = request.form.get("url")
     errors = validate(url_data)
     if errors:
-        return render_template('index.html', errors=errors), 422
-    id = repo.find_id(url_data)
-    if id:
-        render_template('show.html', repeat=True), 422
-        return redirect(url_for(f'/urls/<{id}>'), code=302)
-    id = repo.save(url_data)
+        flash(f"{errors}", 'error')
+        return redirect(url_for('index'), code=302)
+    id_existing = repo.find_id(url_data)
+    if id_existing:
+        id = id_existing
+        flash('Страница уже существует', 'warning')
+    else:
+        id = repo.save(url_data)
+        flash('Страница успешно добавлена', 'success')
     url = repo.find_url(id)
-    render_template('show.html', url=url, add_new=True), 422
-    return redirect(url_for(f'/urls/{id}'), code=302)
-
-
-@app.route('/urls/<id>')
-def find(id):
-    url = repo.find_url(id)
-    return render_template('show.html', url=url)
-
-
-@app.route('/urls')
-def urls():
-    urls = repo.get_content()
-    return render_template('urls.html', urls=urls)
+    render_template('show.html', url=url,), 422
+    return redirect(url_for('url_show', id=id), code=302)
 
 
 if __name__ == '__main__':
