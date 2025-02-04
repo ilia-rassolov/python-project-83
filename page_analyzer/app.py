@@ -3,8 +3,8 @@ from flask import (Flask, redirect, render_template, request,
 import os
 from dotenv import load_dotenv
 import psycopg2
-from db import UrlRepository
-from validator import validate
+from .db import UrlRepository
+from .validator import validate
 
 
 app = Flask(__name__)
