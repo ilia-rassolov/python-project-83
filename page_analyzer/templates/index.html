@@ -11,7 +11,7 @@
 <div class="container border col-6 mt-3 pt-5 ps-5 pb-5 rounded alt='10' bg-light">
     <h1 class="display-3 fw-light">Анализатор страниц</h1>
     <p class="fs-5 fw-light">Бесплатно проверяйте сайты на SEO-пригодность</p>
-    <form class="d-flex" action="/" method="post">
+    <form class="d-flex" action="{{ url_for('add_url') }}" method="post">
         <input class="form-control fs-5" type="url" required name="url" value="{{
           request.form.url }}" placeholder="https//:www.example.com">
         <button class="btn btn-primary btn-lg ms-3 me-5 text-uppercase" type="submit">Проверить</button>

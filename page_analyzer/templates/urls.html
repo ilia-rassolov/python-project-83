@@ -13,12 +13,12 @@
         </tr>
         </thead>
         <tbody>
-        {% for url in urls %}
+        {% for row in content %}
         <tr class="">
-            <td class="">{{ url['id'] }}</td>
-            <td class=""><a class="" href="/urls/{{ url['id'] }}">{{ url['name'] }}</a></td>
-            <td class="">{{ url['created_at'] }}</td>
-            <td class="">пока так</td>
+            <td class="">{{ row['id_url'] }}</td>
+            <td class=""><a class="" href="/urls/{{ row['id_url'] }}">{{ row['name_url'] }}</a></td>
+            <td class="">{{ row['last_created_at'] }}</td>
+            <td class="">{{ row['last_status_code'] }}</td>
         </tr>
         {% endfor %}
         </tbody>
