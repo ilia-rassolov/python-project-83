@@ -2,8 +2,6 @@ from flask import (Flask, redirect, render_template, request,
                    url_for, flash, get_flashed_messages)
 import os
 from dotenv import load_dotenv
-import requests
-from requests import HTTPError
 
 from .db import UrlRepository, CheckRepository
 from .crud import CRUD
@@ -77,16 +75,10 @@ def add_check(id):
     cursor = conn.open_connection()
     repo_urls = UrlRepository(cursor)
     url = repo_urls.find_url(id)
-    name = url['name']
-    resp = requests.get(name)
-    try:
-        resp.raise_for_status()
-    except HTTPError:
+    new_check = repo_urls.make_check(url)
+    if new_check is None:
         flash('Произошла ошибка при проверке', 'error')
         return redirect(url_for('url_show', id=id), code=302)
-    status_code = resp.status_code
-    new_check = {"url_id": id, "status_code": status_code, "h1": 'h1 ?',
-                 "title": 'title ?', "description": 'description ?'}
     repo_checks = CheckRepository(cursor)
     repo_checks.save_check(new_check)
     conn.commit_db()

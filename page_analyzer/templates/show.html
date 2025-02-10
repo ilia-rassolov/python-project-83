@@ -24,16 +24,16 @@
     <h1 class="display">Сайт: {{ url['name'] }}</h1>
     <table class="table table-hover table-bordered" data-test="url">
         <tr>
-            <th class="col-4 fw-medium">ID</th>
-            <th class="col-5  fw-medium">{{ url['id'] }}</th>
+            <th>ID</th>
+            <th>{{ url['id'] }}</th>
         </tr>
         <tr>
-            <th class="fw-medium">Имя</th>
-            <th class="fw-medium">{{ url['name'] }}</th>
+            <th>Имя</th>
+            <th>{{ url['name'] }}</th>
         </tr>
         <tr>
-            <th class="fw-medium">Дата создания</th>
-            <th class="fw-medium">{{ url['created_at'] }}</th>
+            <th>Дата создания</th>
+            <th>{{ url['created_at'] }}</th>
         </tr>
     </table>
 </div>
@@ -56,7 +56,7 @@
         </thead>
         <tbody>
         {% for check in checks %}
-        <tr class="">
+        <tr>
             <td>{{ check['id'] }}</td>
             <td>{{ check['status_code'] }}</td>
             <td>{{ check['h1'] }}</td>
