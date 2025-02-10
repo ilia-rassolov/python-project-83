@@ -69,9 +69,12 @@ class UrlRepository:
         html_doc = resp.text
         soup = BeautifulSoup(html_doc, 'html.parser')
         tag = soup.meta
-        description = tag.get("content", '') if tag.get("name") == "description" else ''
-        title = soup.title.string if soup.title else ''
-        h1 = soup.h1.string if soup.h1 else ''
+        description = tag.get("content", "")\
+            if tag.get("name") == "description" else ""
+        title = soup.title.string\
+            if soup.title else ""
+        h1 = soup.h1.string\
+            if soup.h1 else ""
         new_check = {"url_id": url['id'], "status_code": status_code, "h1": h1,
                      "title": title, "description": description}
         return new_check
