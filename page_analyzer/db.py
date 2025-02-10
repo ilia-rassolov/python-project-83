@@ -12,8 +12,8 @@ class UrlRepository:
         for url in all_urls:
             row = dict()
             self.cursor.execute(f"""SELECT
-                                 MAX(id) FROM url_checks
-                                 WHERE url_id = {url['id']};""")
+                                  MAX(id) FROM url_checks
+                                  WHERE url_id = {url['id']};""")
             check_id = self.cursor.fetchone()[0]
             if check_id:
                 self.cursor.execute(f"""SELECT
