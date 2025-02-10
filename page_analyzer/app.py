@@ -2,8 +2,11 @@ from flask import (Flask, redirect, render_template, request,
                    url_for, flash, get_flashed_messages)
 import os
 from dotenv import load_dotenv
+import requests
+from requests import HTTPError
 
-from .db import UrlRepository, CRUD, CheckRepository
+from .db import UrlRepository, CheckRepository
+from .crud import CRUD
 from .validator import validate
 
 
@@ -11,7 +14,7 @@ app = Flask(__name__)
 
 load_dotenv()
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['DEBUG'] = True
+app.config['DEBUG'] = os.getenv('DEBUG')
 DATABASE_URL = os.getenv('DATABASE_URL')
 
 conn = CRUD(DATABASE_URL)
@@ -71,14 +74,24 @@ def add_url():
 
 @app.post('/urls/<id>/checks')
 def add_check(id):
-    new_check = {"url_id": id, "status_code": "777", "h1": "заголовок сайта",
-                 "title": "заголовок документа", "description": "описание"}
     cursor = conn.open_connection()
+    repo_urls = UrlRepository(cursor)
+    url = repo_urls.find_url(id)
+    name = url['name']
+    resp = requests.get(name)
+    try:
+        resp.raise_for_status()
+    except HTTPError:
+        flash('Произошла ошибка при проверке', 'error')
+        return redirect(url_for('url_show', id=id), code=302)
+    status_code = resp.status_code
+    new_check = {"url_id": id, "status_code": status_code, "h1": 'h1 ?',
+                 "title": 'title ?', "description": 'description ?'}
     repo_checks = CheckRepository(cursor)
     repo_checks.save_check(new_check)
     conn.commit_db()
     conn.close_connection()
-    flash('Страница успешно проверена', 'success_check')
+    flash('Страница успешно проверена', 'success')
     return redirect(url_for('url_show', id=id), code=302)
 
 

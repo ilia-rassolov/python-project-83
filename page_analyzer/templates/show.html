@@ -13,8 +13,8 @@
         {{ message }}
       </div>
     {% endif %}
-    {% if category == 'success_check' %}
-      <div class="alert alert-success flashes" role="alert">
+    {% if category == 'error' %}
+      <div class="alert alert-danger flashes" role="alert">
         {{ message }}
       </div>
     {% endif %}
@@ -41,7 +41,7 @@
     <h2 class="display">Проверки</h2>
     <form action="{{ url_for('add_check', id=url['id']) }}"  method="post">
         <input class="btn btn-primary btn-sm fs-6 mt-2 mb-1"
-               type="submit" name="make_check" value="Запустить проверку">
+               type="submit" value="Запустить проверку">
     </form>
     <table class="table table-hover table-bordered" data-test="checks">
         <thead>
