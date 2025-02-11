@@ -4,7 +4,7 @@ import os
 from dotenv import load_dotenv
 
 from .db import UrlRepository, CheckRepository
-from .crud import CRUD
+from .crud_class import CRUD
 from .validator import validate
 
 
