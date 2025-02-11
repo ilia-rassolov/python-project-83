@@ -68,10 +68,8 @@ class UrlRepository:
         status_code = resp.status_code
         html_doc = resp.text
         soup = BeautifulSoup(html_doc, 'html.parser')
-        title = soup.title.string\
-            if soup.title else ""
-        h1 = soup.h1.string\
-            if soup.h1 else ""
+        title = soup.title.string if soup.title else ""
+        h1 = soup.h1.string if soup.h1 else ""
         description = ""
         tags = soup.find_all('meta')
         for tag in tags:

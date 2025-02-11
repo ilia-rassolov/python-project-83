@@ -21,12 +21,12 @@ Flask-приложение, которое анализирует web-стран
 
 Требования для установки: наличие CLI, CPython ^3.10 и PostgreSQL
 
-Скачайте проект, перейдите в директорию, совершите сборку, потом старт
+Скачайте проект, перейдите в директорию, совершите сборку, потом старт  
 
-`git clone git@github.com:ilia-rassolov/python-project-83.git`
-`cd python-project-83`
-`make build`
-`make start`
+`git clone git@github.com:ilia-rassolov/python-project-83.git`  
+`cd python-project-83`  
+`make build`  
+`make start`  
 
 Перейдите по ссылке в терминале 
 
