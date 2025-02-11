@@ -1,4 +1,4 @@
-### Hexlet tests and linter status:
+#### Hexlet tests and linter status:
 [![Actions Status](https://github.com/ilia-rassolov/python-project-83/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/ilia-rassolov/python-project-83/actions)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/ffa0f30f16b9baf237d7/maintainability)](https://codeclimate.com/github/ilia-rassolov/python-project-83/maintainability)
@@ -32,7 +32,7 @@ Flask-приложение, которое анализирует web-стран
 
 ---
 
-##### Использование
+#### Использование
 
 Для начала введите интересующий Вас сайт и нажмите "ПРОВЕРИТЬ"
 
