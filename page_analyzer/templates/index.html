@@ -16,9 +16,11 @@
     <h1 class="display-3 fw-light">Анализатор страниц</h1>
     <p class="fs-5 fw-light">Бесплатно проверяйте сайты на SEO-пригодность</p>
     <form class="d-flex" action="{{ url_for('add_url') }}" method="post">
-        <input class="form-control fs-5" type="url" required name="url" value="{{
-          request.form.url }}" placeholder="https//:www.example.com">
-        <button class="btn btn-primary btn-lg ms-3 me-5 text-uppercase" type="submit">Проверить</button>
+        <label for="text_" class="visually-hidden">Url для проверки</label>
+        <input type="text" id="text_" required name="url" placeholder="https://www.example.com"
+               value="" class="form-control form-control-lg">
+        <input type="submit" class="btn btn-primary  btn-lg ms-3 px-5
+         text-uppercase mx-3" value="Проверить">
     </form>
 </div>
 {% endblock %}
