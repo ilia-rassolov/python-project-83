@@ -2,15 +2,13 @@
 
 {% block content %}
 {% if messages %}
-<div class="alert alert-danger flashes" role="alert">
     {% for category, message in messages %}
     {% if category == 'error' %}
-      <div class="alert alert-danger flashes" role="alert">
-        {{ message }}
-      </div>
+    <div class="alert alert-danger flashes" role="alert">
+      {{ message }}
+    </div>
     {% endif %}
     {% endfor %}
-</div>
 {% endif %}
 <div class="container border col-6 mt-3 pt-5 ps-5 pb-5 rounded alt='10' bg-light">
     <h1 class="display-3 fw-light">Анализатор страниц</h1>

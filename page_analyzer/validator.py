@@ -2,7 +2,7 @@ from validators.url import url
 
 
 def validate(url_data):
-    errors = None
+    errors = ""
     if not url(url_data):
         errors = "Некорректный URL"
     elif len(url_data) > 255:
