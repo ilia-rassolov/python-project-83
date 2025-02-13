@@ -28,6 +28,7 @@ def urls():
     cursor = conn.open_connection()
     repo_urls = UrlRepository(cursor)
     content = repo_urls.get_content()
+    cursor.close()
     conn.close_connection()
     return render_template('urls.html', content=content,)
 
@@ -41,6 +42,7 @@ def url_show(id):
 
     repo_checks = CheckRepository(cursor)
     checks = repo_checks.get_checks(id)
+    cursor.close()
     conn.close_connection()
     messages = get_flashed_messages(with_categories=True)
     return render_template('show.html',
@@ -66,6 +68,7 @@ def add_url():
         conn.commit_db()
         flash('Страница успешно добавлена', 'success')
     url = repo_urls.find_url(id)
+    cursor.close()
     conn.close_connection()
     render_template('show.html', url=url,), 422
     return redirect(url_for('url_show', id=id), code=302)
@@ -83,6 +86,7 @@ def add_check(id):
         return redirect(url_for('url_show', id=id), code=302)
     repo_checks = CheckRepository(cursor)
     repo_checks.save_check(new_check)
+    cursor.close()
     conn.commit_db()
     conn.close_connection()
     flash('Страница успешно проверена', 'success')

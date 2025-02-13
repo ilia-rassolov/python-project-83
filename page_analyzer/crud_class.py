@@ -14,5 +14,5 @@ class CRUD:
         return self.conn.commit()
 
     def close_connection(self):
-        self.curs.close()
+        # self.curs.close()
         self.conn.close()
