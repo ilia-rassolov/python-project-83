@@ -15,8 +15,6 @@ app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['DEBUG'] = os.getenv('DEBUG')
 DATABASE_URL = os.getenv('DATABASE_URL')
 
-conn = CRUD(DATABASE_URL)
-
 
 @app.route('/')
 def index():
@@ -26,6 +24,7 @@ def index():
 
 @app.route('/urls')
 def urls():
+    conn = CRUD(DATABASE_URL)
     cursor = conn.open_connection()
     repo_urls = UrlRepository(cursor)
     content = repo_urls.get_content()
@@ -35,6 +34,7 @@ def urls():
 
 @app.route('/urls/<id>')
 def url_show(id):
+    conn = CRUD(DATABASE_URL)
     cursor = conn.open_connection()
     repo_urls = UrlRepository(cursor)
     url = repo_urls.find_url(id)
@@ -49,6 +49,7 @@ def url_show(id):
 
 @app.post('/')
 def add_url():
+    conn = CRUD(DATABASE_URL)
     url_data = request.form.get("url")
     errors = validate(url_data)
     if errors:
@@ -72,6 +73,7 @@ def add_url():
 
 @app.post('/urls/<id>/checks')
 def add_check(id):
+    conn = CRUD(DATABASE_URL)
     cursor = conn.open_connection()
     repo_urls = UrlRepository(cursor)
     url = repo_urls.find_url(id)
