@@ -80,7 +80,7 @@ def add_check(id):
     new_check = repo_urls.make_check(url)
     if new_check is None:
         flash('Произошла ошибка при проверке', 'error')
-        return redirect(url_for('url_show', id=id), code=422)
+        return redirect(url_for('url_show', id=id), code=302)
     repo_checks = CheckRepository(conn)
     repo_checks.save_check(new_check)
     db.commit_db()
