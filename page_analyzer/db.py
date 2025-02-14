@@ -1,5 +1,5 @@
 from urllib.parse import urlparse
-from requests import HTTPError
+from requests import HTTPError, Timeout
 import requests
 from bs4 import BeautifulSoup
 from psycopg2.extras import DictCursor
@@ -66,7 +66,10 @@ class UrlRepository:
 
     def make_check(self, url):
         name = url['name']
-        resp = requests.get(name)
+        try:
+            resp = requests.get(name, timeout=1)
+        except Timeout:
+            return None
         try:
             resp.raise_for_status()
         except HTTPError:

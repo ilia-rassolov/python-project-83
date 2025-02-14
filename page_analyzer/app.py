@@ -32,22 +32,7 @@ def urls():
     return render_template('urls.html', content=content,)
 
 
-@app.route('/urls/<id>')
-def url_show(id):
-    db = CRUD(DATABASE_URL)
-    conn = db.open_connection()
-    repo_urls = UrlRepository(conn)
-    url = repo_urls.find_url(id)
-
-    repo_checks = CheckRepository(conn)
-    checks = repo_checks.get_checks(id)
-    db.close_connection()
-    messages = get_flashed_messages(with_categories=True)
-    return render_template('show.html',
-                           url=url, checks=checks, messages=messages,)
-
-
-@app.post('/')
+@app.post('/urls')
 def add_url():
     url_data = request.form.get("url")
     errors = validate(url_data)
@@ -69,6 +54,21 @@ def add_url():
     db.close_connection()
     render_template('show.html', url=url,), 422
     return redirect(url_for('url_show', id=id), code=302)
+
+
+@app.route('/urls/<id>')
+def url_show(id):
+    db = CRUD(DATABASE_URL)
+    conn = db.open_connection()
+    repo_urls = UrlRepository(conn)
+    url = repo_urls.find_url(id)
+
+    repo_checks = CheckRepository(conn)
+    checks = repo_checks.get_checks(id)
+    db.close_connection()
+    messages = get_flashed_messages(with_categories=True)
+    return render_template('show.html',
+                           url=url, checks=checks, messages=messages,)
 
 
 @app.post('/urls/<id>/checks')
