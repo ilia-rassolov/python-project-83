@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 from .db import UrlRepository, CheckRepository
 from .validator import validate
-from .crud_class import CRUD
+from .crud import CRUD
 
 
 app = Flask(__name__)
@@ -63,9 +63,9 @@ def add_url():
         flash('Страница уже существует', 'repeat')
     else:
         id = repo_urls.save_url(url_data)
+        db.commit_db()
         flash('Страница успешно добавлена', 'success')
     url = repo_urls.find_url(id)
-    db.commit_db()
     db.close_connection()
     render_template('show.html', url=url,), 422
     return redirect(url_for('url_show', id=id), code=302)

@@ -47,9 +47,7 @@ class UrlRepository:
 
         with self.conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute("""INSERT INTO urls (name) VALUES
-            (%s) RETURNING id""",
-                         (name,)
-                         )
+            (%s) RETURNING id""", (name,))
             id = curs.fetchone()[0]
         return id
 
