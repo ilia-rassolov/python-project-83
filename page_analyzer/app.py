@@ -38,7 +38,7 @@ def add_url():
     errors = validate(url_data)
     if errors:
         flash(f"{errors}", 'error')
-        return redirect(url_for('index'), code=422)
+        return redirect(url_for('index'), code=302)
     db = CRUD(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
