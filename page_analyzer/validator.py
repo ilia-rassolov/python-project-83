@@ -8,3 +8,4 @@ def validate(url_data):
     elif len(url_data) > 255:
         errors = "URL превышает 255 символов"
     return errors
+
