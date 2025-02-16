@@ -53,8 +53,7 @@ def add_url():
         flash('Страница успешно добавлена', 'success')
     url = repo_urls.find_url(id)
     db.close_connection()
-    render_template('show.html', url=url,), 422
-    return redirect(url_for('url_show', id=id), code=302)
+    return redirect(url_for('url_show', url=url, id=id), code=302)
 
 
 @app.route('/urls/<id>')
