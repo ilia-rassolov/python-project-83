@@ -38,7 +38,8 @@ def add_url():
     errors = validate(url_data)
     if errors:
         flash(f"{errors}", 'error')
-        return render_template('index.html'), 422
+        messages = get_flashed_messages(with_categories=True)
+        return render_template('index.html', messages=messages), 422
     db = CRUD(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
