@@ -3,9 +3,8 @@ from flask import (Flask, redirect, render_template, request,
 import os
 from dotenv import load_dotenv
 
-from .db import UrlRepository, CheckRepository
+from .db import UrlRepository, CheckRepository, DBCLient
 from .validator import validate
-from .crud import CRUD
 
 
 app = Flask(__name__)
@@ -24,7 +23,7 @@ def index():
 
 @app.route('/urls')
 def urls():
-    db = CRUD(DATABASE_URL)
+    db = DBCLient(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
     content = repo_urls.get_content()
@@ -40,7 +39,7 @@ def add_url():
         flash(f"{errors}", 'error')
         messages = get_flashed_messages(with_categories=True)
         return render_template('index.html', messages=messages), 422
-    db = CRUD(DATABASE_URL)
+    db = DBCLient(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
     id_existing = repo_urls.find_id(url_data)
@@ -58,7 +57,7 @@ def add_url():
 
 @app.route('/urls/<id>')
 def url_show(id):
-    db = CRUD(DATABASE_URL)
+    db = DBCLient(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
     url = repo_urls.find_url(id)
@@ -73,7 +72,7 @@ def url_show(id):
 
 @app.post('/urls/<id>/checks')
 def add_check(id):
-    db = CRUD(DATABASE_URL)
+    db = DBCLient(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
     url = repo_urls.find_url(id)
@@ -87,7 +86,3 @@ def add_check(id):
     db.close_connection()
     flash('Страница успешно проверена', 'success')
     return redirect(url_for('url_show', id=id), code=302)
-
-
-if __name__ == '__main__':
-    app.run()

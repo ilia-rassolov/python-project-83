@@ -1,9 +1,10 @@
 from urllib.parse import urlparse
-from requests import HTTPError
-from requests.exceptions import RequestException
 import requests
-from bs4 import BeautifulSoup
+from requests import HTTPError
+import psycopg2
 from psycopg2.extras import DictCursor
+from bs4 import BeautifulSoup
+from psycopg2 import OperationalError, DatabaseError
 
 
 class UrlRepository:
@@ -69,7 +70,7 @@ class UrlRepository:
         name = url['name']
         try:
             resp = requests.get(name, timeout=1)
-        except RequestException:
+        except DatabaseError:
             return None
         try:
             resp.raise_for_status()
@@ -108,3 +109,23 @@ class CheckRepository:
                   ({', '.join(new_check)}) VALUES ({placeholders})""")
         with self.conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute(query, new_check)
+
+
+class DBClient:
+    def __init__(self, db_url):
+        self.db_url = db_url
+
+    def open_connection(self):
+        try:
+            self.conn = psycopg2.connect(self.db_url)
+        except OperationalError as error:
+            print(error)
+        except DatabaseError as error:
+            print(error)
+        return self.conn
+
+    def commit_db(self):
+        return self.conn.commit()
+
+    def close_connection(self):
+        return self.conn.close()
