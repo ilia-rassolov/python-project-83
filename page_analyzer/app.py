@@ -3,8 +3,9 @@ from flask import (Flask, redirect, render_template, request,
 import os
 from dotenv import load_dotenv
 
-from .db import UrlRepository, CheckRepository, DBCLient
-from .validator import validate
+from .db import UrlRepository, CheckRepository, DBClient
+from .validator import validate, get_name
+from .page_data import get_page_data
 
 
 app = Flask(__name__)
@@ -15,6 +16,9 @@ app.config['DEBUG'] = os.getenv('DEBUG')
 DATABASE_URL = os.getenv('DATABASE_URL')
 
 
+db = DBClient(DATABASE_URL)
+
+
 @app.route('/')
 def index():
     messages = get_flashed_messages(with_categories=True)
@@ -23,7 +27,6 @@ def index():
 
 @app.route('/urls')
 def urls():
-    db = DBCLient(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
     content = repo_urls.get_content()
@@ -39,15 +42,15 @@ def add_url():
         flash(f"{errors}", 'error')
         messages = get_flashed_messages(with_categories=True)
         return render_template('index.html', messages=messages), 422
-    db = DBCLient(DATABASE_URL)
+    name_url = get_name(url_data)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
-    id_existing = repo_urls.find_id(url_data)
+    id_existing = repo_urls.find_id(name_url)
     if id_existing:
         id = id_existing
         flash('Страница уже существует', 'repeat')
     else:
-        id = repo_urls.save_url(url_data)
+        id = repo_urls.save_url(name_url)
         db.commit_db()
         flash('Страница успешно добавлена', 'success')
     url = repo_urls.find_url(id)
@@ -57,7 +60,6 @@ def add_url():
 
 @app.route('/urls/<id>')
 def url_show(id):
-    db = DBCLient(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
     url = repo_urls.find_url(id)
@@ -72,11 +74,10 @@ def url_show(id):
 
 @app.post('/urls/<id>/checks')
 def add_check(id):
-    db = DBCLient(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
     url = repo_urls.find_url(id)
-    new_check = repo_urls.make_check(url)
+    new_check = get_page_data(url)
     if new_check is None:
         flash('Произошла ошибка при проверке', 'error')
         return redirect(url_for('url_show', id=id), code=302)

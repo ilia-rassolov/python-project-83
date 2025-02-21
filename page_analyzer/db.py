@@ -1,10 +1,7 @@
-from urllib.parse import urlparse
-import requests
-from requests import HTTPError
 import psycopg2
 from psycopg2.extras import DictCursor
-from bs4 import BeautifulSoup
 from psycopg2 import OperationalError, DatabaseError
+import logging
 
 
 class UrlRepository:
@@ -42,54 +39,18 @@ class UrlRepository:
             row = curs.fetchone()
         return dict(row) if row else None
 
-    def save_url(self, url_data):
-        scheme = urlparse(url_data).scheme
-        hostname = urlparse(url_data).hostname
-        name = f"{scheme}://{hostname}"
-
+    def save_url(self, name):
         with self.conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute("""INSERT INTO urls (name) VALUES
             (%s) RETURNING id""", (name,))
-            id = curs.fetchone()[0]
+            id = curs.fetchone()['id']
         return id
 
-    def find_id(self, url_data):
-        scheme = urlparse(url_data).scheme
-        hostname = urlparse(url_data).hostname
-        name = f"{scheme}://{hostname}"
-
+    def find_id(self, name):
         with self.conn.cursor(cursor_factory=DictCursor) as curs:
-            curs.execute("SELECT id, name FROM urls")
-            urls = curs.fetchall()
-        for row in urls:
-            url = dict(row)
-            if url["name"] == name:
-                return url["id"]
-
-    def make_check(self, url):
-        name = url['name']
-        try:
-            resp = requests.get(name, timeout=1)
-        except DatabaseError:
-            return None
-        try:
-            resp.raise_for_status()
-        except HTTPError:
-            return None
-        status_code = resp.status_code
-        html_doc = resp.text
-        soup = BeautifulSoup(html_doc, 'html.parser')
-        title = soup.title.string if soup.title else ""
-        h1 = soup.h1.string if soup.h1 else ""
-        description = ""
-        tags = soup.find_all('meta')
-        for tag in tags:
-            if tag.get("name") == "description":
-                description = tag.get("content", "")
-                break
-        new_check = {"url_id": url['id'], "status_code": status_code, "h1": h1,
-                     "title": title, "description": description}
-        return new_check
+            curs.execute("SELECT id FROM urls WHERE name = %s", (name,))
+            id = curs.fetchone()['id']
+        return id
 
 
 class CheckRepository:
@@ -118,10 +79,10 @@ class DBClient:
     def open_connection(self):
         try:
             self.conn = psycopg2.connect(self.db_url)
-        except OperationalError as error:
-            print(error)
-        except DatabaseError as error:
-            print(error)
+        except OperationalError:
+            logging.error('Unable to establish connection to database!')
+        except DatabaseError:
+            logging.error('The database is not working correctly!')
         return self.conn
 
     def commit_db(self):
