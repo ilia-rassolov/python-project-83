@@ -49,7 +49,10 @@ class UrlRepository:
     def find_id(self, name):
         with self.conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute("SELECT id FROM urls WHERE name = %s", (name,))
-            id = curs.fetchone()['id']
+            try:
+                id = curs.fetchone()['id']
+            except TypeError:
+                id = None
         return id
 
 
