@@ -46,7 +46,7 @@ def add_url():
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
     id_existing = repo_urls.find_id(name_url)
-    if id_existing is None:
+    if id_existing:
         id = id_existing
         flash('Страница уже существует', 'repeat')
     else:
