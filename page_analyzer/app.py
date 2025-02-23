@@ -45,7 +45,7 @@ def add_url():
     name_url = get_name(url_data)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
-    id_existing = repo_urls.find_id(name_url)
+    id_existing = repo_urls.get_id_by_name(name_url)
     if id_existing:
         id = id_existing
         flash('Страница уже существует', 'repeat')
@@ -53,7 +53,7 @@ def add_url():
         id = repo_urls.save_url(name_url)
         db.commit_db()
         flash('Страница успешно добавлена', 'success')
-    url = repo_urls.find_url(id)
+    url = repo_urls.get_url_by_id(id)
     db.close_connection()
     return redirect(url_for('url_show', url=url, id=id), code=302)
 
@@ -62,7 +62,7 @@ def add_url():
 def url_show(id):
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
-    url = repo_urls.find_url(id)
+    url = repo_urls.get_url_by_id(id)
 
     repo_checks = CheckRepository(conn)
     checks = repo_checks.get_checks(id)
@@ -76,7 +76,7 @@ def url_show(id):
 def add_check(id):
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
-    url = repo_urls.find_url(id)
+    url = repo_urls.get_url_by_id(id)
     new_check = get_page_data(url)
     if new_check is None:
         flash('Произошла ошибка при проверке', 'error')
@@ -87,3 +87,8 @@ def add_check(id):
     db.close_connection()
     flash('Страница успешно проверена', 'success')
     return redirect(url_for('url_show', id=id), code=302)
+
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html',)

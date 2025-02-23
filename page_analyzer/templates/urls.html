@@ -16,7 +16,7 @@
         {% for row in content %}
         <tr>
             <td>{{ row['id_url'] }}</td>
-            <td><a href="/urls/{{ row['id_url'] }}">{{ row['name_url'] }}</a></td>
+            <td><a href="{{ url_for('url_show', id=row['id_url']) }}">{{ row['name_url'] }}</a></td>
             <td>{{ row['last_created_at'] }}</td>
             <td>{{ row['last_status_code'] }}</td>
         </tr>

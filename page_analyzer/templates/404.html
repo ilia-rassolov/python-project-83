@@ -1,0 +1,16 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="container border col-6 mt-3 pt-5 ps-5 pb-5 rounded alt='10' bg-light">
+    <h1 class="display-3 fw-light">Такая страница не существует</h1>
+    <p class="fs-5 fw-light">Но Вы можете сделать новую проверку!</p>
+    <form class="d-flex" action="{{ url_for('add_url') }}" method="post">
+        <label for="text_" class="visually-hidden">Url для проверки</label>
+        <input type="text" id="text_" required name="url" placeholder="https://www.example.com"
+               value="" class="form-control form-control-lg">
+        <input type="submit" class="btn btn-primary  btn-lg ms-3 px-5
+         text-uppercase mx-3" value="Проверить">
+    </form>
+</div>
+{% endblock %}
+

@@ -8,11 +8,8 @@ def get_page_data(url):
     name = url['name']
     try:
         page = requests.get(name, timeout=1)
-    except RequestException:
-        return None
-    try:
         page.raise_for_status()
-    except HTTPError:
+    except (RequestException, HTTPError):
         return None
     status_code = page.status_code
     html_doc = page.text
@@ -25,6 +22,5 @@ def get_page_data(url):
         if tag.get("name") == "description":
             description = tag.get("content", "")
             break
-    check = {"url_id": url['id'], "status_code": status_code, "h1": h1[:254],
+    return {"url_id": url['id'], "status_code": status_code, "h1": h1[:254],
              "title": title[:254], "description": description}
-    return check

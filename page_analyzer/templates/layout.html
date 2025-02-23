@@ -8,8 +8,8 @@
   </head>
   <body>
       <nav class="navbar navbar-dark bg-dark">
-        <a class="navbar-brand ms-3" href="/">Анализатор страниц</a>
-        <a class="navbar-nav me-auto nav-link ms-2" href="/urls">Сайты</a>
+        <a class="navbar-brand ms-3" href="{{ url_for('index') }}">Анализатор страниц</a>
+        <a class="navbar-nav me-auto nav-link ms-2" href="{{ url_for('add_url') }}">Сайты</a>
       </nav>
       <div id="content">
         {% block content %}{% endblock %}
