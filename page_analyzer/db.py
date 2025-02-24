@@ -11,9 +11,7 @@ class UrlRepository:
     def get_content(self):
         with self.conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute("""
-            DROP VIEW IF EXISTS get_last_check_by_url CASCADE;
-            
-            CREATE VIEW get_last_check_by_url AS
+            WITH get_last_check_by_url AS (
             SELECT
                 urls.id AS id_url,
                 urls.name AS name_url,
@@ -22,44 +20,29 @@ class UrlRepository:
             LEFT JOIN url_checks
                 ON
                     urls.id = url_checks.url_id
-            GROUP BY urls.id , urls.name;
-            
+            GROUP BY urls.id , urls.name
+            )
+
             SELECT
-                get_last_check_by_url.name_url,
-                get_last_check_by_url.id_url,
-                get_last_check_by_url.last_check,
-                url_checks.id AS id_check,
+                glsbu.name_url,
+                glsbu.id_url,
+                glsbu.last_check,
                 url_checks.status_code AS last_status_code,
                 url_checks.description,
                 url_checks.h1,
                 url_checks.title,
                 url_checks.created_at AS last_created_at
-            FROM get_last_check_by_url
+            FROM get_last_check_by_url AS glsbu
             LEFT JOIN url_checks
                 ON
-                    get_last_check_by_url.id_url = url_checks.url_id
-            WHERE get_last_check_by_url.last_check = url_checks.id OR get_last_check_by_url.last_check IS NULL
-            ORDER BY get_last_check_by_url.last_check DESC;""")
+                    glsbu.id_url = url_checks.url_id
+            WHERE glsbu.last_check = url_checks.id OR glsbu.last_check IS NULL
+            ORDER BY glsbu.id_url DESC;""")
             content = [dict(row) for row in curs]
-        # content = []
-        # for url in all_urls:
-        #     row = dict()
-        #     with self.conn.cursor(cursor_factory=DictCursor) as curs:
-        #         curs.execute(f"""SELECT
-        #                           MAX(id) FROM url_checks
-        #                           WHERE url_id = {url['id']};""")
-        #         check_id = curs.fetchone()[0]
-        #     if check_id:
-        #         with self.conn.cursor(cursor_factory=DictCursor) as curs:
-        #             curs.execute(f"""SELECT
-        #                              id AS id_check,
-        #                              created_at AS last_created_at,
-        #                              status_code AS last_status_code
-        #                              FROM url_checks WHERE id = {check_id};""")
-        #             row = dict(curs.fetchone())
-        #     row['id_url'] = url['id']
-        #     row['name_url'] = url['name']
-        #     content.append(row)
+            for row in content:
+                for k, v in row.items():
+                    if v is None:
+                        row[k] = ""
         return content
 
     def get_url_by_id(self, id):

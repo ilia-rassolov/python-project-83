@@ -23,4 +23,4 @@ def get_page_data(url):
             description = tag.get("content", "")
             break
     return {"url_id": url['id'], "status_code": status_code, "h1": h1[:254],
-             "title": title[:254], "description": description}
+            "title": title[:254], "description": description}
