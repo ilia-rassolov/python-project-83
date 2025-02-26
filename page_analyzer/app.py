@@ -16,9 +16,6 @@ app.config['DEBUG'] = os.getenv('DEBUG')
 DATABASE_URL = os.getenv('DATABASE_URL')
 
 
-db = DBClient(DATABASE_URL)
-
-
 @app.route('/')
 def index():
     messages = get_flashed_messages(with_categories=True)
@@ -27,6 +24,7 @@ def index():
 
 @app.route('/urls')
 def urls():
+    db = DBClient(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
     content = repo_urls.get_content()
@@ -43,6 +41,7 @@ def add_url():
         messages = get_flashed_messages(with_categories=True)
         return render_template('index.html', messages=messages), 422
     name_url = get_name(url_data)
+    db = DBClient(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
     id_existing = repo_urls.get_id_by_name(name_url)
@@ -60,6 +59,7 @@ def add_url():
 
 @app.route('/urls/<id>')
 def url_show(id):
+    db = DBClient(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
     url = repo_urls.get_url_by_id(id)
@@ -74,6 +74,7 @@ def url_show(id):
 
 @app.post('/urls/<id>/checks')
 def add_check(id):
+    db = DBClient(DATABASE_URL)
     conn = db.open_connection()
     repo_urls = UrlRepository(conn)
     url = repo_urls.get_url_by_id(id)
