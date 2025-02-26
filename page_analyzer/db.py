@@ -11,38 +11,28 @@ class UrlRepository:
     def get_content(self):
         with self.conn.cursor(cursor_factory=DictCursor) as curs:
             curs.execute("""
-            WITH get_last_check_by_url AS (
             SELECT
-                urls.id AS id_url,
-                urls.name AS name_url,
-                MAX(url_checks.id) AS last_check
+                urls.id AS url_id,
+                urls.name AS url_name
             FROM urls
-            LEFT JOIN url_checks
-                ON
-                    urls.id = url_checks.url_id
-            GROUP BY urls.id , urls.name
-            )
-
-            SELECT
-                glsbu.name_url,
-                glsbu.id_url,
-                glsbu.last_check,
-                url_checks.status_code AS last_status_code,
-                url_checks.description,
-                url_checks.h1,
-                url_checks.title,
-                url_checks.created_at AS last_created_at
-            FROM get_last_check_by_url AS glsbu
-            LEFT JOIN url_checks
-                ON
-                    glsbu.id_url = url_checks.url_id
-            WHERE glsbu.last_check = url_checks.id OR glsbu.last_check IS NULL
-            ORDER BY glsbu.id_url DESC;""")
+            ORDER BY urls.id DESC;""")
             content = [dict(row) for row in curs]
-            for row in content:
-                for k, v in row.items():
-                    if v is None:
-                        row[k] = ""
+        with self.conn.cursor(cursor_factory=DictCursor) as curs:
+            curs.execute("""
+            SELECT
+                DISTINCT  ON(url_id)
+                url_id,
+                status_code,
+                created_at
+            FROM  url_checks
+            ORDER BY url_id, status_code, created_at DESC;""")
+            checks = [dict(row) for row in curs]
+        for url in content:
+            for check in checks:
+                if url["url_id"] == check["url_id"]:
+                    url["last_created_at"] = check["created_at"]
+                    url["last_status_code"] = check["status_code"]
+                    break
         return content
 
     def get_url_by_id(self, id):
@@ -90,6 +80,7 @@ class CheckRepository:
 class DBClient:
     def __init__(self, db_url):
         self.db_url = db_url
+        self.conn = None
 
     def open_connection(self):
         try:
