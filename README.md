@@ -1,4 +1,4 @@
-#### Hexlet tests and linter status:
+### Hexlet tests and linter status:
 [![Actions Status](https://github.com/ilia-rassolov/python-project-83/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/ilia-rassolov/python-project-83/actions)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/ffa0f30f16b9baf237d7/maintainability)](https://codeclimate.com/github/ilia-rassolov/python-project-83/maintainability)
@@ -7,24 +7,31 @@
 
 # Анализатор страниц
 
-#### Это мой третий учебный проект на платформе Хекслет
+### Это мой третий учебный проект на платформе Хекслет
 
 Flask-приложение, которое анализирует web-страницы на SEO-пригодность
 
 ---
 
-#### Установка проекта 
+### Установка проекта 
 
-Вы можете пользоваться готовым проектом в сети: https://python-project-83-j08w.onrender.com
+##### Вы можете пользоваться готовым проектом в сети: https://python-project-83-j08w.onrender.com
 
-Либо установить на PC:
+##### Либо установить на PC:
 
 Требования для установки: наличие CLI, CPython ^3.10 и PostgreSQL
 
-Скачайте проект, перейдите в директорию, совершите сборку, потом старт  
+Скачайте проект, перейдите в директорию  
 
 `git clone git@github.com:ilia-rassolov/python-project-83.git`  
 `cd python-project-83`  
+
+Переименуйте файл .env_example в .env и измените в нём данные конфигурации.  
+Например, укажите настройки Вашей PostgreSQL:  
+
+`DATABASE_URL="postgresql://<имя пользователя>:<пароль пользователя>@localhost:5432/<имя сущ. базы данных>"`
+
+Совершите сборку проекта, потом старт
 `make build`  
 `make start`  
 
@@ -32,7 +39,7 @@ Flask-приложение, которое анализирует web-стран
 
 ---
 
-#### Использование
+### Использование
 
 Для начала введите интересующий Вас сайт и нажмите "ПРОВЕРИТЬ"
 
